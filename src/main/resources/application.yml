@@ -1,7 +1,7 @@
 server:
   port: 8000
   servlet:
-    context-path: /boot
+    context-path: /
     encoding:
       charset: UTF-8
       enabled: true
@@ -21,6 +21,7 @@ spring:
     password: test00
     driver-class-name: oracle.jdbc.driver.OracleDriver
 
+
   devtools:
     # Live Reload
     livereload:
@@ -28,7 +29,6 @@ spring:
   level:
     root: info
     com.web.springbootpro: debug
-
 
 
 mybatis:
@@ -39,3 +39,6 @@ mybatis:
     #config-location: classpath:mybatis-config.xml
     #configuration:
     # map-underscore-to-camel-case: true
+
+
+
