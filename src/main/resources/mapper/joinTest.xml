@@ -31,6 +31,34 @@
         WHERE
         ID = #{id}
     </select>
+    <!--Username 회원정보 조회-->
+    <select id="findByUsername" resultType="com.web.springbootpro.model.User" >
+        SELECT
+             ID
+            ,USERNAME
+            ,PASSWORD
+            ,EMAIL
+            ,ROLE
+            ,CREATEDATE
+        FROM
+            "USER"
+        WHERE
+            USERNAME = #{username}
+    </select>
+    <!--로그인 회원정보 조회-->
+    <select id="userLogin" resultType="com.web.springbootpro.model.User" >
+        SELECT
+            ID
+             ,USERNAME
+             ,PASSWORD
+             ,EMAIL
+             ,ROLE
+             ,CREATEDATE
+        FROM
+            "USER"
+        WHERE
+            EMAIL = #{email} AND PASSWORD= #{password}
+    </select>
 
     <!--모든 회원정보 조회-->
     <select id="findAll" resultType="com.web.springbootpro.model.User">
@@ -68,5 +96,19 @@
             "USER"
 
     </select>
+
+    <update id="updateUser" parameterType="com.web.springbootpro.model.User">
+        UPDATE "USER"
+            SET  PASSWORD = #{password}
+                ,EMAIL = #{email}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="com.web.springbootpro.model.User">
+        DELETE
+            FROM "USER"
+        WHERE ID =#{id}
+    </delete>
+
 
 </mapper>

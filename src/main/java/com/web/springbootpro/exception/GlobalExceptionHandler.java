@@ -26,6 +26,7 @@ import java.io.IOException;
  */
 @Slf4j
 @ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private final HttpStatus HTTP_STATUS_OK = HttpStatus.OK;

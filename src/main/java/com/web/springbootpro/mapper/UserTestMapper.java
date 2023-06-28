@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface UserTestMapper {
@@ -18,4 +19,12 @@ public interface UserTestMapper {
     List<User> getUserList(@Param("start")int start,@Param("end") int end);
 
     int getTotalUsers();
+
+    void updateUser(User user);
+
+    void deleteById(Long id);
+
+    void userLogin(User user);
+
+    Optional<User> findByUsername(String username);
 }

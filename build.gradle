@@ -18,8 +18,13 @@ repositories {
 	mavenCentral()
 }
 
+
 dependencies {
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	//스프링부트 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	//스프링 부트 시큐리티 JSP 라이브러리 사용을 위해 추가
+	implementation 'org.springframework.security:spring-security-taglibs'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.1'
 
@@ -42,7 +47,7 @@ dependencies {
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
