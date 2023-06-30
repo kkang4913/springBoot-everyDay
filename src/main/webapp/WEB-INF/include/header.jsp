@@ -20,7 +20,7 @@
 <body>
 
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-  <a class="navbar-brand" href="/">OOTD</a>
+  <a class="navbar-brand" href="${root}/">OOTD</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -34,9 +34,9 @@
       </c:when>
       <c:otherwise>
         <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="/dummy/board/writeForm">글쓰기</a></li>
-          <li class="nav-item"><a class="nav-link" href="/dummy/user/userForm">회원정보</a></li>
-          <li class="nav-item"><a class="nav-link" href="/dummy/user/logout">로그아웃</a></li>
+          <li class="nav-item"><a class="nav-link" href="${root}/board/saveForm">글쓰기</a></li>
+          <li class="nav-item"><a class="nav-link" href="${root}/board/updateForm">회원정보</a></li>
+          <li class="nav-item"><a class="nav-link" href="${root}/logout">로그아웃</a></li>
         </ul>
       </c:otherwise>
     </c:choose>
@@ -46,5 +46,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+
 
 </body>

@@ -3,13 +3,12 @@ package com.web.springbootpro.mapper;
 import com.web.springbootpro.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
 
 @Mapper
-public interface UserTestMapper {
+public interface UserMapper {
     void userJoin(User user);
 
     User findById(Long id);

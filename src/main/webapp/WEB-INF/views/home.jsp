@@ -8,5 +8,5 @@ pageEncoding="UTF-8"%>
 
 
 <script src="${root}/resources/static/js/BoardList.js" type="text/javascript"> </script>
-<script src="${root}/resources/static/js/Paging.js" type="text/javascript"> </script>
+<!--<script src="${root}/resources/static/js/Paging.js" type="text/javascript"> </script>-->
 <%@ include file="../include/footer.jsp" %>
