@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.springbootpro.mapper.BoardMapper">
+    <!--모든 회원정보 조회-->
+    <select id="findAll" resultType="com.web.springbootpro.model.Board">
+        SELECT *
+            FROM
+        BOARD
+    </select>
+    <!--페이징 기능-->
+    <select id="getBoardList" resultType="com.web.springbootpro.model.Board">
+        SELECT *
+        FROM (
+        SELECT ROWNUM AS rnum, t.*
+        FROM (
+        SELECT
+         ID
+        ,TITLE
+        ,CONTENT
+        ,"COUNT"
+        FROM BOARD
+        ORDER BY ID ASC
+        ) t
+        WHERE ROWNUM <![CDATA[<=]]>  #{end}
+        )
+        WHERE rnum <![CDATA[>=]]>  #{start}
+    </select>
+    <!--페이징을 위한 BOARD 게시글 수 조회-->
+    <select id="getTotalBoard" resultType="int">
+        SELECT
+        COUNT(*)
+            FROM
+        Board
+    </select>
+
+    <insert id="boardSave" parameterType="com.web.springbootpro.model.Board">
+        INSERT INTO BOARD(
+                          ID
+                         ,TITLE
+                         ,CONTENT
+                         ,"COUNT"
+                         ,USERID
+                         ,CREATEDATE
+        ) VALUES (
+                 BOARD_SEQ.NEXTVAL
+                 ,#{title}
+                 ,#{content}
+                 ,#{count}
+                 ,#{userid.id}
+                 ,TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS'))
+    </insert>
+
+    <select id="findById" resultType="com.web.springbootpro.model.Board">
+        SELECT
+             ID
+            ,TITLE
+            ,CONTENT
+            ,"COUNT"
+            ,USERID
+            ,TO_CHAR(CREATEDATE,'YYYY-MM-DD') AS CREATEDATE
+        FROM
+            "BOARD"
+        WHERE
+            USERID =#{id}
+
+    </select>
+
+</mapper>
