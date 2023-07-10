@@ -16,7 +16,7 @@ $(document).ready(function() {
                     html += '<div class="card-body">';
                     html += '<h4 class="card-title">' + board.title + '</h4>';
                     html += '<p class="card-text">' + board.content + '</p>';
-                    html += '<a href="/blog/board/' + board.id +'" class="btn btn-primary">상세보기</a>';
+                    html += '<a href="/board/' + board.id +'" class="btn btn-primary">상세보기</a>';
                     html += '</div>';
                     html += '</div>';
                 });

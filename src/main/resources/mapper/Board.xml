@@ -58,11 +58,11 @@
             ,CONTENT
             ,"COUNT"
             ,USERID
-            ,TO_CHAR(CREATEDATE,'YYYY-MM-DD') AS CREATEDATE
+            ,CREATEDATE
         FROM
             "BOARD"
         WHERE
-            USERID =#{id}
+            ID =#{id}
 
     </select>
 
