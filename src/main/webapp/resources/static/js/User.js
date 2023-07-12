@@ -4,7 +4,38 @@ let index= {
         $("#btn-save").on("click", () => {
             this.save();
         });
+
+        $("#btn-update").on("click",()=>{
+           this.update();
+        });
+
     },
+
+    update:function (){
+
+        console.log("회원정보 수정 함수 실행")
+
+        let data = {
+            id: $("#id").val(),
+            username: $("#username").val(),
+            password: $("#password").val(),
+            email: $("#email").val()
+        };
+      $.ajax({
+         type: "PUT",
+         url: "/user",
+         data: JSON.stringify(data),
+         contentType: "application/json; charset=utf-8",
+         dataType: "json"
+      }).done(function (resp){
+          alert("회원정보 수정이 완료되었습니다.");
+          location.href = "/";
+      }).fail(function (error){
+          alert("회원정보 수정에 실패하였습니다" + JSON.stringify(error));
+      });
+
+    },
+
 
     save: function () {
         let data = {

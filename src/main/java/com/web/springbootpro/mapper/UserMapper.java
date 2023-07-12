@@ -26,4 +26,6 @@ public interface UserMapper {
     void userLogin(User user);
 
     Optional<User> findByUsername(String username);
+
+    void userUpdate(User user);
 }

@@ -6,10 +6,11 @@ import com.web.springbootpro.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 @Slf4j
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpSession;
 
         @Autowired
         private UserService userService;
+
+        @Autowired
+        private AuthenticationManager authenticationManager;
 
         @PostMapping("/auth/api/joinProc")
         public ResponseDto<Integer> save(@RequestBody User user){
@@ -38,5 +42,20 @@ import javax.servlet.http.HttpSession;
         }
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
+
+    @PutMapping("/user")
+    public ResponseDto<Integer> update(@RequestBody User user){
+            System.out.println("회원정보 수정 함수 호출");
+            log.info("회원정보 수정 데이터 = {}",user);
+            userService.userUpdate(user);
+
+            Authentication authentication =
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+            return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
 
 }

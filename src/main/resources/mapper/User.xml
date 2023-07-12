@@ -97,7 +97,7 @@
 
     </select>
 
-    <update id="updateUser" parameterType="com.web.springbootpro.model.User">
+    <update id="userUpdate" parameterType="com.web.springbootpro.model.User">
         UPDATE "USER"
             SET  PASSWORD = #{password}
                 ,EMAIL = #{email}

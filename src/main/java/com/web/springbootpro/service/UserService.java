@@ -3,12 +3,13 @@ package com.web.springbootpro.service;
 
 import com.web.springbootpro.model.User;
 import com.web.springbootpro.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Slf4j
 @Service
 public class UserService {
 
@@ -65,4 +66,18 @@ public class UserService {
     }
 
 
+    public void userUpdate(User user) {
+        System.out.println("userService[회원정보수정] = " + user);
+        User persistance = mapper.findById(user.getId());
+        if (persistance ==null) {
+            throw  new IllegalArgumentException("회원찾기 실패");
+        }
+        String rawPassword = user.getPassword(); //원문 패스워드
+        String encPassword = encoder.encode(rawPassword); //해쉬 패스워드
+
+        persistance.setPassword(encPassword);
+        persistance.setEmail(user.getEmail());
+
+        mapper.userUpdate(persistance);
+    }
 }
