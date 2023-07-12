@@ -40,30 +40,75 @@
                          ,TITLE
                          ,CONTENT
                          ,"COUNT"
-                         ,USERID
+                         ,USER_ID
                          ,CREATEDATE
+                         ,SHOW
         ) VALUES (
                  BOARD_SEQ.NEXTVAL
                  ,#{title}
                  ,#{content}
                  ,#{count}
                  ,#{userid.id}
-                 ,TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS'))
+                 ,TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS')
+                 ,'Y')
     </insert>
 
-    <select id="findById" resultType="com.web.springbootpro.model.Board">
-        SELECT
-             ID
-            ,TITLE
-            ,CONTENT
-            ,"COUNT"
-            ,USERID
-            ,CREATEDATE
-        FROM
-            "BOARD"
-        WHERE
-            ID =#{id}
+    <resultMap id="boardResultMap" type="com.web.springbootpro.model.Board">
+        <id property="id" column="ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="count" column="COUNT"/>
 
+        <result property="createDate" column="CREATEDATE"/>
+        <result property="show" column="SHOW"/>
+        <association property="userid" javaType="com.web.springbootpro.model.User" resultMap="userResultMap"/>
+    </resultMap>
+
+    <resultMap id="userResultMap" type="com.web.springbootpro.model.User">
+        <id property="id" column="USERID" />
+        <result property="username" column="USERNAME" />
+        <result property="role" column="ROLE" />
+        <result property="password" column="PASSWORD" />
+        <result property="email" column="EMAIL" />
+        <result property="createDate" column="CREATEDATE" />
+    </resultMap>
+
+    <select id="findById" resultMap="boardResultMap">
+        SELECT
+            B.ID
+             ,B.TITLE
+             ,B.CONTENT
+             ,B."COUNT"
+             ,B.USER_ID
+             ,B.CREATEDATE
+             ,B.SHOW
+             ,U.ID AS USERID
+             ,U.USERNAME
+             ,U.PASSWORD
+             ,U.EMAIL
+             ,U.ROLE
+             ,U.CREATEDATE
+        FROM
+            BOARD B
+                JOIN "USER" U ON B.USER_ID = U.ID
+        WHERE B.ID = #{id}
     </select>
+
+
+    <delete id="deleteById">
+        DELETE FROM "BOARD"
+        WHERE
+            ID = #{id}
+    </delete>
+
+    <update id="updateBoard" parameterType="com.web.springbootpro.model.Board" >
+        UPDATE "BOARD"
+        SET TITLE = #{title},
+            CONTENT = #{content}
+        WHERE ID = #{id}
+
+    </update>
+
+
 
 </mapper>

@@ -33,7 +33,23 @@ public class BoardService {
     }
 
     public Board findById(Long id) {
-        Board board =boardMapper.findById(id);
+        Board board = boardMapper.findById(id);
         return board;
     }
+
+    public void deleteById(Long id) {
+        boardMapper.deleteById(id);
+    }
+
+    public void updateBoard(Long id, Board requestBoard){
+        log.info("BoardService - update_id = {},update_Board={}",id,requestBoard);
+
+        Board board = boardMapper.findById(id);
+
+        board.setTitle(requestBoard.getTitle());
+        board.setContent(requestBoard.getContent());
+
+        boardMapper.updateBoard(board);
+    }
+
 }

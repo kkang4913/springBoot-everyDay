@@ -3,6 +3,7 @@ package com.web.springbootpro.controller;
 import com.web.springbootpro.config.auth.PrincipalDetail;
 import com.web.springbootpro.domain.Paging;
 import com.web.springbootpro.model.Board;
+import com.web.springbootpro.model.User;
 import com.web.springbootpro.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,24 @@ public class BoardController {
      */
 
     @GetMapping("/board/{id}")
-    public String findById(@PathVariable Long id, Model model){
+    public String findById(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDetail principal){
             System.out.println("게시글 상세보기 함수 실행 = " + id);
             Board board = boardService.findById(id);
-            log.info("boardById={}", board);
+            log.info("boardById = {}", board);
+
+
             model.addAttribute("board",board);
+            model.addAttribute("principal",principal);
         return "board/detail";
+    }
+
+    @GetMapping("/board/{id}/updateForm")
+    public String updateForm(@PathVariable Long id, Model model){
+        System.out.println("게시물 업데이트 폼 함수 실행 = " + id);
+        Board board = boardService.findById(id);
+        log.info("board 게시글 정보={}",board);
+        model.addAttribute("board",boardService.findById(id));
+        return "board/updateForm";
+
     }
 }
