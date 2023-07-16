@@ -10,12 +10,14 @@
         ,PASSWORD
         ,EMAIL
         ,CREATEDATE
+        ,OAUTH
         ) VALUES (
          USER_SEQ.NEXTVAL
         ,#{username}
         ,#{password}
         ,#{email}
-        ,TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS'))
+        ,TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS')
+        ,#{oauth})
     </insert>
     <!--회원정보 조회-->
     <select id="findById" resultType="com.web.springbootpro.model.User" >
@@ -40,6 +42,7 @@
             ,EMAIL
             ,ROLE
             ,CREATEDATE
+            ,OAUTH
         FROM
             "USER"
         WHERE

@@ -1,10 +1,12 @@
 package com.web.springbootpro.model;
 
-import lombok.Data;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class User {
 
     private Long id;
@@ -13,6 +15,10 @@ public class User {
     private String password;
     private String email;
     private Timestamp createDate;
+    private String oauth;
 
 
+    public User() {
+
+    }
 }

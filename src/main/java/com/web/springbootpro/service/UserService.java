@@ -29,7 +29,7 @@ public class UserService {
 
         user.setPassword(encPassword);
         user.setRole("USER");
-
+        log.info("가입하는 유저 플랫폼 = {}", user.getOauth());
         mapper.userJoin(user);
     }
 
@@ -79,5 +79,12 @@ public class UserService {
         persistance.setEmail(user.getEmail());
 
         mapper.userUpdate(persistance);
+    }
+
+    public User userSeach(String username) {
+        User user = mapper.findByUsername(username).orElseGet(() -> {
+            return new User();
+        });
+        return user;
     }
 }

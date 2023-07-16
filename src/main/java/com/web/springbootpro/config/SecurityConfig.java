@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 // 이유 : 자바 스크립트 방식 -> 시큐리티에서 공격으로 간주, 막아버림
                                 //        테스트를 위해 기능 비활성화
             .authorizeRequests()
-                .antMatchers("/**","/auth/**","/resources/**","/static/js/**","/css/**","image/**")
+                .antMatchers("/**","/auth/**","/webapp/resources/**","/static/js/**","/css/**","image/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
