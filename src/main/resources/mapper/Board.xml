@@ -62,6 +62,15 @@
         <result property="createDate" column="CREATEDATE"/>
         <result property="show" column="SHOW"/>
         <association property="userid" javaType="com.web.springbootpro.model.User" resultMap="userResultMap"/>
+
+        <!-- Reply에 대한 resultMap 추가 -->
+        <collection property="replys" ofType="com.web.springbootpro.model.Reply">
+            <id property="id" column="REPLYS"/>
+            <result property="content" column="REPLY_CONTENT"/>
+            <result property="createDate" column="REPLY_CREATEDATE"/>
+            <!-- 필요한 필드들을 추가로 정의해주세요. -->
+                <association property="user" javaType="com.web.springbootpro.model.User" resultMap="userResultMap"/>
+        </collection>
     </resultMap>
 
     <resultMap id="userResultMap" type="com.web.springbootpro.model.User">
@@ -73,24 +82,29 @@
         <result property="createDate" column="CREATEDATE" />
     </resultMap>
 
+
     <select id="findById" resultMap="boardResultMap">
         SELECT
-            B.ID
-             ,B.TITLE
-             ,B.CONTENT
-             ,B."COUNT"
-             ,B.USER_ID
-             ,B.CREATEDATE
-             ,B.SHOW
-             ,U.ID AS USERID
-             ,U.USERNAME
-             ,U.PASSWORD
-             ,U.EMAIL
-             ,U.ROLE
-             ,U.CREATEDATE
+            B.ID,
+            B.TITLE,
+            B.CONTENT,
+            B."COUNT",
+            B.USER_ID,
+            B.CREATEDATE,
+            B.SHOW,
+            U.ID AS USERID,
+            U.USERNAME,
+            U.PASSWORD,
+            U.EMAIL,
+            U.ROLE,
+            U.CREATEDATE,
+            CASE WHEN R.ID IS NOT NULL THEN R.ID ELSE NULL END AS REPLYS,
+            R.CONTENT AS REPLY_CONTENT,
+            R.CREATEDATE AS REPLY_CREATEDATE
         FROM
             BOARD B
                 JOIN "USER" U ON B.USER_ID = U.ID
+                LEFT JOIN REPLY R ON B.ID = R.BOARD_ID
         WHERE B.ID = #{id}
     </select>
 

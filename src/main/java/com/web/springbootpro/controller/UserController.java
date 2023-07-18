@@ -67,7 +67,7 @@ public class UserController {
         // 데이터 요청에 필요한 정보들을 하나의 객체에 담기, 규칙에 따라
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "");
+        params.add("client_id", "ee23445d02dab269d03fe4fa482ea2dd");
         params.add("redirect_uri", "http://localhost:8000/auth/kakao/callback");
         params.add("code", code);
 

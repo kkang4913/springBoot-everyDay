@@ -3,8 +3,10 @@ package com.web.springbootpro.controller;
 import com.web.springbootpro.config.auth.PrincipalDetail;
 import com.web.springbootpro.domain.Paging;
 import com.web.springbootpro.model.Board;
+import com.web.springbootpro.model.Reply;
 import com.web.springbootpro.model.User;
 import com.web.springbootpro.service.BoardService;
+import com.web.springbootpro.service.ReplyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +22,10 @@ public class BoardController {
 
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private ReplyService replyService;
+
 
     //모든 데이터 출력
     @GetMapping("/dummy/board")
@@ -50,12 +56,16 @@ public class BoardController {
     /**
      * 게시글 상세보기
      */
-
     @GetMapping("/board/{id}")
     public String findById(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDetail principal){
             log.info("1. 게시글 번호 = {}" , id);
             Board board = boardService.findById(id);
             log.info("2. 게시글 디테일 정보 = {}" , board);
+
+
+            // 추가 + 댓글 리스트
+
+
 
             model.addAttribute("board",board);
             model.addAttribute("principal",principal);

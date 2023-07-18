@@ -35,17 +35,21 @@
         <br>
         <div class="card">
             <div class="card-header">댓글목록</div>
-                <ul id="reply-box" class="list-group">
+            <ul id="reply-box" class="list-group">
+                <c:if test="${not empty board.replys}">
                     <c:forEach var="reply" items="${board.replys}">
                         <li id="reply--1" class="list-group-item d-flex justify-content-between">
-                            <div>${reply.conten}</div>
+                            <div>${reply.content}</div>
                             <div class="d-flex">
-                                <div class="font-italic">작성자 : ${reply.user.username}&nbsp;</div>
-                                <button class="badge">삭제</button>
+                                <c:if test="${not empty reply.id}">
+                                    <div class="font-italic">작성자 : ${reply.user.username}&nbsp;</div>
+                                    <button class="badge">삭제</button>
+                                </c:if>
                             </div>
                         </li>
                     </c:forEach>
-                </ul>
+                </c:if>
+            </ul>
         </div>
 </div>
 
