@@ -14,12 +14,11 @@ spring:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
-
   datasource:
     url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+    driver-class-name: oracle.jdbc.driver.OracleDriver
     username: test00
     password: test00
-    driver-class-name: oracle.jdbc.driver.OracleDriver
 
 
   devtools:

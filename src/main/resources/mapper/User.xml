@@ -5,19 +5,27 @@
     <!--회원가입 -->
     <insert id="userJoin" parameterType="com.web.springbootpro.model.User">
         INSERT INTO "USER"(
-         ID
-        ,USERNAME
-        ,PASSWORD
-        ,EMAIL
-        ,CREATEDATE
-        ,OAUTH
+            ID,
+            USERNAME,
+            PASSWORD,
+            EMAIL,
+            CREATEDATE,
+            OAUTH
         ) VALUES (
-         USER_SEQ.NEXTVAL
-        ,#{username}
-        ,#{password}
-        ,#{email}
-        ,TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS')
-        ,#{oauth})
+            USER_SEQ.NEXTVAL,
+            #{username},
+            #{password},
+            #{email},
+            TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
+        <choose>
+            <when test="oauth != null">
+                #{oauth}
+            </when>
+            <otherwise>
+                NULL
+            </otherwise>
+        </choose>
+        )
     </insert>
     <!--회원정보 조회-->
     <select id="findById" resultType="com.web.springbootpro.model.User" >

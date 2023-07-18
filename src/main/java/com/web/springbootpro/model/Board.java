@@ -1,8 +1,6 @@
 package com.web.springbootpro.model;
 
 import lombok.Data;
-import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.mapping.FetchType;
 
 import java.sql.Timestamp;
 
@@ -15,4 +13,6 @@ public class Board {
     private User userid;
     private Timestamp createDate;
     private String show;
+
 }
+

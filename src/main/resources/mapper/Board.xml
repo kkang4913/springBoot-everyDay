@@ -91,7 +91,7 @@
         FROM
             BOARD B
                 JOIN "USER" U ON B.USER_ID = U.ID
-        WHERE B.USER_ID = #{id}
+        WHERE B.ID = #{id}
     </select>
 
 

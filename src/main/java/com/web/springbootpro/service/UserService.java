@@ -30,6 +30,7 @@ public class UserService {
         user.setPassword(encPassword);
         user.setRole("USER");
         log.info("가입하는 유저 플랫폼 = {}", user.getOauth());
+        log.info("일반 회원가입 유저 정보 ={}" ,user);
         mapper.userJoin(user);
     }
 

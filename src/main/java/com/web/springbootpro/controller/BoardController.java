@@ -26,18 +26,14 @@ public class BoardController {
     @ResponseBody
     public Paging<Board> getBoardList(@RequestParam(defaultValue = "1")int page
             , @RequestParam(defaultValue = "5")int size){
-        log.info("page={}",page);
-        log.info("size={}",size);
 
         int start = (page -1 ) * size + 1;
         int end   = page * size;
 
         List<Board> boardList = boardService.getBoardList(start,end);
         int totalBoard = boardService.getTotalBoard();
-        log.info("totalBoards={}",totalBoard);
 
         int totalPages =(int) Math.ceil((double) totalBoard / size);
-        log.info("totalPages={}",totalPages);
 
         return new Paging<>(boardList,page,totalPages);
     }
@@ -57,10 +53,9 @@ public class BoardController {
 
     @GetMapping("/board/{id}")
     public String findById(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDetail principal){
-            System.out.println("게시글 상세보기 함수 실행 = " + id);
+            log.info("1. 게시글 번호 = {}" , id);
             Board board = boardService.findById(id);
-            log.info("boardById = {}", board);
-
+            log.info("2. 게시글 디테일 정보 = {}" , board);
 
             model.addAttribute("board",board);
             model.addAttribute("principal",principal);
@@ -69,9 +64,7 @@ public class BoardController {
 
     @GetMapping("/board/{id}/updateForm")
     public String updateForm(@PathVariable Long id, Model model){
-        System.out.println("게시물 업데이트 폼 함수 실행 = " + id);
         Board board = boardService.findById(id);
-        log.info("board 게시글 정보={}",board);
         model.addAttribute("board",boardService.findById(id));
         return "board/updateForm";
 
