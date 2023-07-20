@@ -62,12 +62,11 @@ public class BoardController {
             Board board = boardService.findById(id);
             log.info("2. 게시글 디테일 정보 = {}" , board);
 
-
-            // 추가 + 댓글 리스트
-
-
+            List<Reply> reply =replyService.findById(id);
+            log.info("3. 댓글 정보 = {} " ,reply);
 
             model.addAttribute("board",board);
+            model.addAttribute("reply",reply);
             model.addAttribute("principal",principal);
         return "board/detail";
     }
@@ -75,7 +74,7 @@ public class BoardController {
     @GetMapping("/board/{id}/updateForm")
     public String updateForm(@PathVariable Long id, Model model){
         Board board = boardService.findById(id);
-        model.addAttribute("board",boardService.findById(id));
+        model.addAttribute("board",board);
         return "board/updateForm";
 
     }

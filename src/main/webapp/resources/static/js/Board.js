@@ -17,8 +17,33 @@ let index = {
         $("#btn-update").on("click", () =>{
            this.update();
         });
+
+        $("#btn-reply-save").on("click", () => {
+            this.replySave();
+        });
     },
 
+    replySave:function (){
+        let boardId =$("#boardId").val();
+        let data = {
+            content: $("#reply-content").val()
+        };
+        console.log("댓글 작성 함수 실행 = " + data )
+
+        $.ajax({
+            type:"POST",
+            url: `/api/board/${boardId}/reply`,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).done(function (resp){
+            alert("댓글 작성이 완료되었습니다.");
+            location.href = `/board/${boardId}`;
+        }).fail(function (error){
+            alert(JSON.stringify(error));
+        });
+
+    },
     update: function (){
         let id=$("#id").val();
 

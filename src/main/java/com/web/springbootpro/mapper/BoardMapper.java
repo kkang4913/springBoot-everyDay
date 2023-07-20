@@ -1,6 +1,7 @@
 package com.web.springbootpro.mapper;
 
 import com.web.springbootpro.model.Board;
+import com.web.springbootpro.model.Reply;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,5 @@ public interface BoardMapper {
     void deleteById(Long id);
 
     void updateBoard(Board board);
+
 }

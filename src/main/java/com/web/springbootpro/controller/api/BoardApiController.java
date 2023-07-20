@@ -3,6 +3,7 @@ package com.web.springbootpro.controller.api;
 import com.web.springbootpro.config.auth.PrincipalDetail;
 import com.web.springbootpro.domain.ResponseDto;
 import com.web.springbootpro.model.Board;
+import com.web.springbootpro.model.Reply;
 import com.web.springbootpro.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,13 @@ public class BoardApiController {
         log.info("API_id = {},API_board={}",id,board);
 
         boardService.updateBoard(id,board);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @PostMapping("/api/board/{boardId}/reply")
+    public ResponseDto<Integer> replySave(@PathVariable Long boardId, @RequestBody Reply reply, @AuthenticationPrincipal PrincipalDetail principal){
+        boardService.saveComment(boardId,reply,principal.getUser());
+
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
