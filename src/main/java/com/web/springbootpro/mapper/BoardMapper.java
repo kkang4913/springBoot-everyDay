@@ -21,4 +21,11 @@ public interface BoardMapper {
 
     void updateBoard(Board board);
 
+    void deleteByReplyId(Long id);
+
+    void updateCount(Long id);
+
+    List<Board> findByTitleContaining(@Param("type") String searchType,@Param("keyword")String searchKeyword,@Param("start")int start, @Param("end") int end);
+
+    int searchTotalBoard(@Param("type")String searchType,@Param("keyword")String searchKeyword);
 }

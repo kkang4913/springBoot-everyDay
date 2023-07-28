@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Slf4j
@@ -31,7 +33,9 @@ public class BoardController {
     @GetMapping("/dummy/board")
     @ResponseBody
     public Paging<Board> getBoardList(@RequestParam(defaultValue = "1")int page
-            , @RequestParam(defaultValue = "5")int size){
+            , @RequestParam(defaultValue = "5")int size
+            , @RequestParam(defaultValue = "") String searchKeyword
+            , @RequestParam(defaultValue = "") String searchType){
 
         int start = (page -1 ) * size + 1;
         int end   = page * size;
@@ -41,7 +45,17 @@ public class BoardController {
 
         int totalPages =(int) Math.ceil((double) totalBoard / size);
 
-        return new Paging<>(boardList,page,totalPages);
+
+        if (searchKeyword.equals("")){
+            return new Paging<>(boardList,page,totalPages);
+        }else {
+            List<Board> searchBoardList = boardService.findByTitleContaining(searchType,searchKeyword,start,end);
+            log.info("검색 함수 실행 ={} , 타입={}, 키워드={}",searchBoardList,searchType,searchKeyword);
+            int searchBoard = boardService.searchTotalBoard(searchType,searchKeyword);
+            int searchTotalPages =(int) Math.ceil((double) searchBoard / size);
+
+            return new Paging<>(searchBoardList,page,searchTotalPages);
+        }
     }
 
     /**
@@ -57,13 +71,13 @@ public class BoardController {
      * 게시글 상세보기
      */
     @GetMapping("/board/{id}")
-    public String findById(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDetail principal){
-            log.info("1. 게시글 번호 = {}" , id);
-            Board board = boardService.findById(id);
-            log.info("2. 게시글 디테일 정보 = {}" , board);
+    public String detail(@PathVariable Long id, Model model, @AuthenticationPrincipal PrincipalDetail principal,
+                           HttpServletRequest request, HttpServletResponse response){
 
+            Long userId = principal != null ? principal.getUser().getId() : null;
+
+            Board board = boardService.detail(id,request,response,userId);
             List<Reply> reply =replyService.findById(id);
-            log.info("3. 댓글 정보 = {} " ,reply);
 
             model.addAttribute("board",board);
             model.addAttribute("reply",reply);
@@ -72,8 +86,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}/updateForm")
-    public String updateForm(@PathVariable Long id, Model model){
-        Board board = boardService.findById(id);
+    public String updateForm(@PathVariable Long id, Model model, HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal PrincipalDetail principal){
+        Board board = boardService.detail(id,request,response,principal.getUser().getId());
         model.addAttribute("board",board);
         return "board/updateForm";
 

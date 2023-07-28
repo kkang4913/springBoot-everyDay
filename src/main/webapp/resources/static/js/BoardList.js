@@ -1,34 +1,68 @@
-
-
 $(document).ready(function() {
     loadUBoardList(1);
-    function loadUBoardList(page) {
+
+
+    function loadUBoardList(page,searchKeyword,searchType) {
         $.ajax({
             url: "/dummy/board",
             method: "GET",
-            data: {page: page},
+            data: {page: page,
+                   searchKeyword: searchKeyword,
+                   searchType: searchType
+            },
             success: function (result) {
-                var boardList = $("#boardList");
-                var html = "";
+                let boardList = $("#boardList");
+                let search = $("#search");
+                let html = "";
+                let searchHtml = "";
+                search.empty();
                 boardList.empty();
-                result.data.forEach(function (board) {
+                searchHtml += '<div class="form-inline p-2 bd-highlight" >';
+                searchHtml += '<select class="form-control" name="type" id="searchType">';
+                searchHtml += '<option selected value="">전체</option>';
+                searchHtml += '<option value="title">제목</option>';
+                searchHtml += '<option value="content">내용</option>';
+                searchHtml += '<option value="writer">작성자</option>';
+                searchHtml += '</select>';
+                searchHtml += '</div>';
+                searchHtml += '<div class="form-inline p-2 bd-highlight">';
+                searchHtml += '<div class="input-group">';
+                searchHtml += '<input type="text" id="searchKeyword" class="form-control" placeholder="검색">';
+                searchHtml += '<div class="input-group-append">';
+                searchHtml += '<button id="btn-search" class="btn btn-primary search-keyword">Search</button>';
+                searchHtml += '</div>';
+                searchHtml += '</div>';
+                searchHtml += '</div>';
+                    result.data.forEach(function (board) {
                     html += '<div class="card m-2" style="width:100%">';
                     html += '<div class="card-body">';
                     html += '<h4 class="card-title">' + board.title + '</h4>';
                     html += '<p class="card-text">' + board.content + '</p>';
                     html += '<a href="/board/' + board.id +'" class="btn btn-primary">상세보기</a>';
+                    html += '<span style="float:right">작성일: ' + board.createDate + '</span><br>\n'
+                    html += '<span style="float:right">조회수: ' + board.count + '</span><br>\n'
+                    html += '<span style="float:right">작성자: ' + board.userid.nickname + '</span>'
                     html += '</div>';
                     html += '</div>';
                 });
+                search.append(searchHtml);
                 boardList.append(html);
 
-                $(document).on('click', '.page-link', function(e) {
+                $(document).off('click','.page-link').on('click', '.page-link', function(e) {
                     e.preventDefault();
-                    var page = $(this).data('page');
+                    let page = $(this).data('page');
                     console.log(page);
                     loadUBoardList(page);
                 });
 
+                $(document).off('click','.search-keyword').on('click', '.search-keyword', function(e) {
+                    e.preventDefault();
+                    let searchKeyword = $("#searchKeyword").val();
+                    let searchType = $("#searchType").val();
+                    console.log(searchKeyword);
+                    console.log(searchType);
+                    loadUBoardList(page,searchKeyword,searchType);
+                });
 
 
                 var pagination = $("#pagination");
@@ -36,10 +70,6 @@ $(document).ready(function() {
                 if (result.data.length > 0) {
                     var currentPage = result.currentPage;
                     var totalPages = result.totalPages;
-
-                    console.log(currentPage);
-                    console.log(totalPages);
-
 
                     if (currentPage > 1) {
                         var prevPage = currentPage - 1;
@@ -63,3 +93,8 @@ $(document).ready(function() {
         });
     }
 });
+
+
+
+
+

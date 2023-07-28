@@ -5,6 +5,7 @@ import com.web.springbootpro.domain.ResponseDto;
 import com.web.springbootpro.model.Board;
 import com.web.springbootpro.model.Reply;
 import com.web.springbootpro.service.BoardService;
+import com.web.springbootpro.service.ReplyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class BoardApiController {
     @Autowired
     private BoardService boardService;
 
+    @Autowired
+    private ReplyService replyService;
+
     @PostMapping("/api/board")
     public ResponseDto<Integer> save(@RequestBody Board board, @AuthenticationPrincipal PrincipalDetail principal){
         boardService.boardWrite(board, principal.getUser());
@@ -29,8 +33,10 @@ public class BoardApiController {
 
     @DeleteMapping("/api/board/{id}")
     public ResponseDto<Integer> deleteById(@PathVariable Long id){
-        log.info("게시글 삭제 ID = ",id);
+        boardService.deleteByReplyId(id);
+        System.out.println("댓글 삭제 함수 실행 = " + id);
         boardService.deleteById(id);
+        System.out.println("게시글 삭제 함수 실행 = " + id);
 
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
@@ -51,5 +57,12 @@ public class BoardApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
+    @DeleteMapping("/api/board/{boardId}/reply/{replyId}")
+    public ResponseDto<Integer> replyDelete(@PathVariable Long replyId){
+        replyService.replyDelete(replyId);
+
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+
+    }
 
 }

@@ -3,7 +3,9 @@ pageEncoding="UTF-8"%>
 
 <%@ include file="../include/header.jsp" %>
 
-<div class="container" id="boardList"></div>
+<div class="container mt-2 d-flex" id="search"></div>
+
+<div class="container " id="boardList"></div>
 <ul style="display: flex; justify-content: center;" id="pagination" class="pagination"></ul>
 
 

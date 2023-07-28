@@ -51,6 +51,7 @@
             R.CONTENT,
             R.BOARD_ID,
             R.USER_ID AS "USER",
+            R.CREATEDATE,
             U.ID,
             U.USERNAME
         FROM
@@ -66,6 +67,10 @@
         ORDER BY
             R.CREATEDATE DESC
     </select>
+    <delete id="deleteById">
+        DELETE FROM REPLY
+        WHERE ID = #{replyId}
+    </delete>
 
 
 </mapper>

@@ -28,4 +28,10 @@ public interface UserMapper {
     Optional<User> findByUsername(String username);
 
     void userUpdate(User user);
+
+
+    int existByUsername(String username);
+    int existByUserNickname(String nickname);
+
+    int existByUserEmail(String email);
 }

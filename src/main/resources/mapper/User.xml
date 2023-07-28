@@ -4,19 +4,28 @@
 <mapper namespace="com.web.springbootpro.mapper.UserMapper">
     <!--회원가입 -->
     <insert id="userJoin" parameterType="com.web.springbootpro.model.User">
-        INSERT INTO "USER"(
-            ID,
-            USERNAME,
-            PASSWORD,
-            EMAIL,
-            CREATEDATE,
-            OAUTH
+        INSERT INTO "USER" (
+        ID,
+        USERNAME,
+        PASSWORD,
+        NICKNAME,
+        EMAIL,
+        CREATEDATE,
+        OAUTH
         ) VALUES (
-            USER_SEQ.NEXTVAL,
-            #{username},
-            #{password},
-            #{email},
-            TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
+        USER_SEQ.NEXTVAL,
+        #{username},
+        #{password},
+        <choose>
+            <when test="nickname != null">
+                #{nickname}
+            </when>
+            <otherwise>
+                NULL
+            </otherwise>
+        </choose>,
+        #{email},
+        TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
         <choose>
             <when test="oauth != null">
                 #{oauth}
@@ -33,6 +42,7 @@
              ID
             ,USERNAME
             ,PASSWORD
+            ,NICKNAME
             ,EMAIL
             ,ROLE
             ,CREATEDATE
@@ -48,6 +58,7 @@
             ,USERNAME
             ,PASSWORD
             ,EMAIL
+            ,NICKNAME
             ,ROLE
             ,CREATEDATE
             ,OAUTH
@@ -63,6 +74,7 @@
              ,USERNAME
              ,PASSWORD
              ,EMAIL
+             ,NICKNAME
              ,ROLE
              ,CREATEDATE
         FROM
@@ -111,7 +123,7 @@
     <update id="userUpdate" parameterType="com.web.springbootpro.model.User">
         UPDATE "USER"
             SET  PASSWORD = #{password}
-                ,EMAIL = #{email}
+                ,NICKNAME = #{nickname}
         WHERE ID = #{id}
     </update>
 
@@ -120,6 +132,17 @@
             FROM "USER"
         WHERE ID =#{id}
     </delete>
+    <!-- 아이디 중복 유효성 검사 -->
+    <select id="existByUserNickname" resultType="int">
+        SELECT COUNT(*) FROM "USER" WHERE NICKNAME = #{nickname,jdbcType=VARCHAR}
+    </select>
+    <select id="existByUsername" resultType="int">
+        SELECT COUNT(*) FROM "USER" WHERE USERNAME = #{username}
+    </select>
+    <select id="existByUserEmail" resultType="int">
+        SELECT COUNT(*) FROM "USER" WHERE EMAIL = #{email}
+    </select>
+
 
 
 </mapper>

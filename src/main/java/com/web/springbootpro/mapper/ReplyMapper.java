@@ -10,4 +10,6 @@ public interface ReplyMapper {
     List<Reply> getReplyList(Long id);
 
     void saveComment(Reply requestReply);
+
+    void deleteById(Long replyId);
 }

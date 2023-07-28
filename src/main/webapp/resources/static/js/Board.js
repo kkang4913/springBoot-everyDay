@@ -23,6 +23,20 @@ let index = {
         });
     },
 
+    replyDelete:function (boardId,replyId){
+        $.ajax({
+            type: "DELETE",
+            url:  `/api/board/${boardId}/reply/${replyId}`,
+            dataType: "json",
+        }).done(function (resp){
+            alert("댓글이 삭제되었습니다.");
+            location.href=`/board/${boardId}`;
+        }).fail(function (error){
+            alert(JSON.stringify(error));
+        });
+    },
+
+
     replySave:function (){
         let boardId =$("#boardId").val();
         let data = {
@@ -74,7 +88,7 @@ let index = {
 
     deleteById: function (){
         let id = $("#id").text();
-        console.log("게시글 삭제 ajax 호출");
+        console.log("게시글 삭제 ajax 호출" + id);
         $.ajax({
             type : "DELETE",
             url: "/api/board/" + id,

@@ -5,6 +5,7 @@ import com.web.springbootpro.model.Reply;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,5 +21,11 @@ public class ReplyService {
         List<Reply> reply = replyMapper.getReplyList(id);
 
         return  reply;
+    }
+
+    @Transactional
+    public void replyDelete(Long replyId){
+        log.info("댓글 삭제= {}",replyId);
+        replyMapper.deleteById(replyId);
     }
 }

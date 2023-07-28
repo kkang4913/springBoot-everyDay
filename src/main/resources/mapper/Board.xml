@@ -9,18 +9,23 @@
         BOARD
     </select>
     <!--페이징 기능-->
-    <select id="getBoardList" resultType="com.web.springbootpro.model.Board">
+    <select id="getBoardList" resultMap="boardResultMap">
         SELECT *
         FROM (
         SELECT ROWNUM AS rnum, t.*
         FROM (
         SELECT
-         ID
-        ,TITLE
-        ,CONTENT
-        ,"COUNT"
-        FROM BOARD
-        ORDER BY ID ASC
+        B.ID,
+        B.TITLE,
+        B.CONTENT,
+        B.CREATEDATE,
+        B."COUNT",
+        U.ID AS USERID,
+        U.USERNAME,
+        U.NICKNAME AS USER_NICKNAME
+        FROM BOARD B
+        INNER JOIN "USER" U ON B.USER_ID = U.ID -- 여기서 USER_ID는 게시글 작성자의 ID를 참조하는 컬럼 이름으로 가정합니다.
+        ORDER BY B.ID ASC
         ) t
         WHERE ROWNUM <![CDATA[<=]]>  #{end}
         )
@@ -32,6 +37,68 @@
         COUNT(*)
             FROM
         Board
+    </select>
+
+    <!--검색 페이징 -->
+    <select id="findByTitleContaining" resultMap="boardResultMap">
+        SELECT *
+        FROM (
+        SELECT ROWNUM AS rnum, t.*
+        FROM (
+        SELECT
+        B.ID,
+        B.TITLE,
+        B.CONTENT,
+        B.CREATEDATE,
+        B."COUNT",
+        U.USERNAME,
+        U.NICKNAME AS USER_NICKNAME
+        FROM BOARD B
+        INNER JOIN "USER" U ON B.USER_ID = U.ID
+        WHERE
+        <choose>
+            <when test="keyword != null and type.equals('')">
+                B.TITLE LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="type != null and type.equals('title')">
+                B.TITLE LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="type != null and type.equals('content')">
+               B.CONTENT LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="type != null and type.equals('writer')">
+                U.NICKNAME LIKE '%' || #{keyword} || '%'
+            </when>
+            <otherwise>
+                1=1
+            </otherwise>
+        </choose>
+        ORDER BY ID ASC
+        ) t
+        WHERE ROWNUM <![CDATA[<=]]>  #{end}
+        )
+        WHERE rnum <![CDATA[>=]]>  #{start}
+    </select>
+    <!--페이징을 위한 BOARD 게시글 수 조회-->
+    <select id="searchTotalBoard" resultType="int">
+        SELECT COUNT(*)
+        FROM Board B
+        INNER JOIN "USER" U ON B.USER_ID = U.ID
+        WHERE
+        <choose>
+            <when test="type != null and type.equals('title')">
+                B.TITLE LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="type != null and type.equals('content')">
+                 B.CONTENT LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="type != null and type.equals('writer')">
+                 U.NICKNAME LIKE '%' || #{keyword} || '%'
+            </when>
+            <otherwise>
+                1=1
+            </otherwise>
+        </choose>
     </select>
 
     <insert id="boardSave" parameterType="com.web.springbootpro.model.Board">
@@ -69,6 +136,7 @@
         <result property="username" column="USERNAME" />
         <result property="role" column="ROLE" />
         <result property="password" column="PASSWORD" />
+        <result property="nickname" column="USER_NICKNAME" />
         <result property="email" column="EMAIL" />
         <result property="createDate" column="CREATEDATE" />
     </resultMap>
@@ -95,10 +163,14 @@
     </select>
 
 
-    <delete id="deleteById">
-        DELETE FROM "BOARD"
-        WHERE
-            ID = #{id}
+    <!-- 댓글 삭제를 위한 SQL -->
+    <delete id="deleteByReplyId">
+        DELETE FROM REPLY WHERE BOARD_ID = #{id}
+    </delete>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM BOARD WHERE ID = #{id}
     </delete>
 
     <update id="updateBoard" parameterType="com.web.springbootpro.model.Board" >
@@ -109,6 +181,11 @@
 
     </update>
 
+    <update id="updateCount" parameterType="long">
+        UPDATE BOARD
+        SET "COUNT" = "COUNT" + 1
+        WHERE ID = #{id}
+    </update>
 
 
 </mapper>

@@ -36,6 +36,9 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.9.0'
 
 
+	implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final' // 사용하고 있는 Hibernate Validator의 버전에 맞게 변경해주세요
+
+
 
 	//lombok
 	compileOnly 'org.projectlombok:lombok'

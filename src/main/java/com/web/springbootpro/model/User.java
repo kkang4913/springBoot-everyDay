@@ -14,6 +14,7 @@ public class User {
     private String role;
     private String password;
     private String email;
+    private String nickname;
     private Timestamp createDate;
     private String oauth;
 

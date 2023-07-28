@@ -1,5 +1,6 @@
 package com.web.springbootpro.service;
 
+import com.web.springbootpro.config.auth.PrincipalDetail;
 import com.web.springbootpro.mapper.BoardMapper;
 import com.web.springbootpro.mapper.ReplyMapper;
 import com.web.springbootpro.model.Board;
@@ -10,7 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -37,9 +42,34 @@ public class BoardService {
         log.info("컨트롤러에서 넘어온 정보={}",board);
         boardMapper.boardSave(board);
     }
+    @Transactional
+    public Board detail(Long id, HttpServletRequest request, HttpServletResponse response, Long principal_id) {
+        Cookie oldCookie = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null )
+            for (Cookie cookie : cookies)
+                if (cookie.getName().equals("boardView"))
+                    oldCookie = cookie;
 
-    public Board findById(Long id) {
-        Board board = boardMapper.findById(id);
+        if (oldCookie != null){
+            if (!oldCookie.getValue().contains("[" + id.toString() + "]")){
+                boardMapper.updateCount(id);
+                oldCookie.setValue(oldCookie.getValue()+ "[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60*60*24);
+                response.addCookie(oldCookie);
+            }
+        }
+        else {
+            boardMapper.updateCount(id);
+            Cookie newCookie = new Cookie("boardView","[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60*60*24);
+            response.addCookie(newCookie);
+        }
+        Optional<Board> boardOptional = Optional.ofNullable(boardMapper.findById(id));
+        Board board = boardOptional.orElseThrow(() -> new IllegalArgumentException("글 상세보기 실패: 아이디를 찾을 수 없습니다."));
+
         return board;
     }
 
@@ -81,4 +111,15 @@ public class BoardService {
     }
 
 
+    public void deleteByReplyId(Long id) {
+        boardMapper.deleteByReplyId(id);
+    }
+
+    public List<Board> findByTitleContaining(String searchType,String searchKeyword, int start, int end) {
+        return boardMapper.findByTitleContaining(searchType,searchKeyword,start,end);
+    }
+
+    public int searchTotalBoard(String searchType,String searchKeyword) {
+       return boardMapper.searchTotalBoard(searchType,searchKeyword);
+    }
 }
